@@ -21,6 +21,7 @@ from MedicalApp.serializers import *
 #     queryset = Company.objects.all()
 #     serializer_class = CompanySerliazer
 
+# for help go to https://www.django-rest-framework.org/api-guide/viewsets/
 
 class CompanyViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
@@ -72,6 +73,7 @@ class CompanyViewSet(viewsets.ViewSet):
 class CompanyBankViewset(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
     def create(self,request):
         try:
             serializer=CompanyBankSerializer(data=request.data,context={"request":request})
@@ -103,20 +105,19 @@ class CompanyBankViewset(viewsets.ViewSet):
         return Response({"error":False,"message":"Data Has Been Updated"})
 
 
-
-
-
 class CompanyNameViewSet(generics.ListAPIView):
     serializer_class = CompanySerliazer
     def get_queryset(self):
         name=self.kwargs["name"]
         return Company.objects.filter(name=name)
 
+
 class MedicineByNameViewSet(generics.ListAPIView):
     serializer_class = MedicineSerliazer
     def get_queryset(self):
         name=self.kwargs["name"]
         return Medicine.objects.filter(name__contains=name)
+
 
 class CompanyOnlyViewSet(generics.ListAPIView):
     serializer_class = CompanySerliazer
@@ -283,6 +284,7 @@ class EmployeeViewset(viewsets.ViewSet):
         serializer.save()
         return Response({"error":False,"message":"Data Has Been Updated"})
 
+
 #Employee Bank Viewset
 class EmployeeBankViewset(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
@@ -316,6 +318,7 @@ class EmployeeBankViewset(viewsets.ViewSet):
         serializer.is_valid()
         serializer.save()
         return Response({"error":False,"message":"Data Has Been Updated"})
+
 
 #Employee Salary Viewset
 class EmployeeSalaryViewset(viewsets.ViewSet):
@@ -351,6 +354,7 @@ class EmployeeSalaryViewset(viewsets.ViewSet):
         serializer.save()
         return Response({"error":False,"message":"Data Has Been Updated"})
 
+
 class EmployeeBankByEIDViewSet(generics.ListAPIView):
     serializer_class = EmployeeBankSerializer
     authentication_classes = [JWTAuthentication]
@@ -359,6 +363,7 @@ class EmployeeBankByEIDViewSet(generics.ListAPIView):
         employee_id=self.kwargs["employee_id"]
         return EmployeeBank.objects.filter(employee_id=employee_id)
 
+
 class EmployeeSalaryByEIDViewSet(generics.ListAPIView):
     serializer_class = EmployeeSalarySerializer
     authentication_classes = [JWTAuthentication]
@@ -366,6 +371,7 @@ class EmployeeSalaryByEIDViewSet(generics.ListAPIView):
     def get_queryset(self):
         employee_id=self.kwargs["employee_id"]
         return EmployeeSalary.objects.filter(employee_id=employee_id)
+
 
 class GenerateBillViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
@@ -405,8 +411,7 @@ class GenerateBillViewSet(viewsets.ViewSet):
             medicine_details_list.append(medicine_detail1)
             #print(medicine_detail)
 
-        serializer3 = BillDetailsSerializer(data=medicine_details_list, many=True,
-                                               context={"request": request})
+        serializer3 = BillDetailsSerializer(data=medicine_details_list, many=True,context={"request": request})
         serializer3.is_valid()
         serializer3.save()
 
@@ -414,6 +419,7 @@ class GenerateBillViewSet(viewsets.ViewSet):
         #except:
             #dict_response = {"error": True, "message": "Error During Generating BIll"}
         return Response(dict_response)
+
 
 class CustomerRequestViewset(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
@@ -456,6 +462,7 @@ class CustomerRequestViewset(viewsets.ViewSet):
             dict_response={"error":True,"message":"Error During Updating Customer Data"}
 
         return Response(dict_response)
+
 
 class HomeApiViewset(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
@@ -539,6 +546,6 @@ class HomeApiViewset(viewsets.ViewSet):
         dict_respone={"error":False,"message":"Home Page Data","customer_request":len(customer_request_serializer.data),"bill_count":len(bill_count_serializer.data),"medicine_count":len(medicine_count_serializer.data),"company_count":len(company_count_serializer.data),"employee_count":len(employee_count_serializer.data),"sell_total":sell_amt,"buy_total":buy_amt,"profit_total":profit_amt,"request_pending":len(customer_request_pending_serializer.data),"request_completed":len(customer_request_completed_serializer.data),"profit_amt_today":profit_amt_today,"sell_amt_today":sell_amt_today,"medicine_expire_serializer_data":len(medicine_expire_serializer.data),"sell_chart":sell_chart_list,"buy_chart":buy_chart_list,"profit_chart":profit_chart_list}
         return  Response(dict_respone)
 
-company_list=CompanyViewSet.as_view({"get":"list"})
-company_creat=CompanyViewSet.as_view({"post":"create"})
-company_update=CompanyViewSet.as_view({"put":"update"})
+# company_list=CompanyViewSet.as_view({"get":"list"})
+# company_creat=CompanyViewSet.as_view({"post":"create"})
+# company_update=CompanyViewSet.as_view({"put":"update"})
